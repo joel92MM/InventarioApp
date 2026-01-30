@@ -38,8 +38,11 @@ public class GestorDatos {
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {support.addPropertyChangeListener(pcl);}
 
+    /**
+     * Carga datos desde un archivo de texto y los guarda en la BD usando JPA.
+     */
     public void cargarDesdeArchivo(String ruta) throws InventarioException {
-        File archivo = new File("datos/" + ruta);
+        File archivo = new File("Datos/" + ruta);
         try (Scanner sc = new Scanner(archivo)) {
             while (sc.hasNextLine()) {
                 String[] partes = sc.nextLine().split(",");
@@ -55,8 +58,11 @@ public class GestorDatos {
         }
     }
 
+    /**
+     * Guarda una lista de productos en un archivo de texto.
+     */
     public void guardarEnArchivoTexto(List<ProductoDTO> productos, String ruta) throws InventarioException {
-        File carpeta = new File("datos");
+        File carpeta = new File("Datos");
         if (!carpeta.exists()) carpeta.mkdirs();
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(carpeta, ruta)))) {
@@ -69,6 +75,9 @@ public class GestorDatos {
         }
     }
 
+    /**
+     * Exporta la lista de productos a un archivo XML.
+     */
     public void guardarEnXML(List<Producto> productos, String rutaXml) throws Exception {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -98,6 +107,33 @@ public class GestorDatos {
         transformer.transform(source, result);
     }
 
+    /**
+     * Lee un archivo XML y muestra su contenido en la consola (Requisito: DOM/SAX).
+     */
+    public void mostrarContenidoXML(String rutaXml) throws Exception {
+        File xmlFile = new File(rutaXml);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(xmlFile);
+        doc.getDocumentElement().normalize();
+
+        System.out.println("Elemento raíz: " + doc.getDocumentElement().getNodeName());
+        NodeList nList = doc.getElementsByTagName("producto");
+
+        for (int i = 0; i < nList.getLength(); i++) {
+            Node nNode = nList.item(i);
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                System.out.println("Producto: " + eElement.getElementsByTagName("nombre").item(0).getTextContent());
+                System.out.println("Precio: " + eElement.getElementsByTagName("precio").item(0).getTextContent());
+                System.out.println("----------------------------");
+            }
+        }
+    }
+
+    /**
+     * Transforma un XML a HTML usando XSLT.
+     */
     public void transformarAHtml(String xmlPath, String xslPath, String outHtml) throws InventarioException {
         try {
             TransformerFactory factory = TransformerFactory.newInstance();
@@ -110,6 +146,9 @@ public class GestorDatos {
         }
     }
 
+    /**
+     * Consulta un valor específico en el XML usando XPath.
+     */
     public String consultarPrecioXPath(String nombreProducto) throws Exception {
         Document doc = DocumentBuilderFactory.newInstance()
                 .newDocumentBuilder().parse(new File("productos.xml"));
@@ -117,6 +156,8 @@ public class GestorDatos {
         String expression = "/inventario/producto[nombre='" + nombreProducto + "']/precio";
         return xPath.compile(expression).evaluate(doc);
     }
+
+    // --- JDBC OPERATIONS (CRUD) ---
 
     public void insertarProductoJDBC(ProductoDTO dto) throws SQLException {
         String sql = "INSERT INTO productos (nombre, precio) VALUES (?, ?)";
@@ -151,6 +192,53 @@ public class GestorDatos {
         }
         return lista;
     }
+
+    public void actualizarProductoJDBC(String nombre, double nuevoPrecio) throws SQLException {
+        String sql = "UPDATE productos SET precio = ? WHERE nombre = ?";
+        Connection conn = null;
+        try {
+            conn = conexionJDBC.conectar();
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setDouble(1, nuevoPrecio);
+                pstmt.setString(2, nombre);
+                int rows = pstmt.executeUpdate();
+                if (rows > 0) {
+                    conn.commit();
+                } else {
+                    conn.rollback(); // O simplemente no hacer commit si no se encontró
+                }
+            }
+        } catch (SQLException e) {
+            if (conn != null) conn.rollback();
+            throw e;
+        } finally {
+            if (conn != null) conn.close();
+        }
+    }
+
+    public void eliminarProductoJDBC(String nombre) throws SQLException {
+        String sql = "DELETE FROM productos WHERE nombre = ?";
+        Connection conn = null;
+        try {
+            conn = conexionJDBC.conectar();
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, nombre);
+                int rows = pstmt.executeUpdate();
+                if (rows > 0) {
+                    conn.commit();
+                } else {
+                    conn.rollback();
+                }
+            }
+        } catch (SQLException e) {
+            if (conn != null) conn.rollback();
+            throw e;
+        } finally {
+            if (conn != null) conn.close();
+        }
+    }
+
+    // --- JPA OPERATIONS ---
 
     public void insertarConJPA(Producto p) {jpaRepository.save(p);}
 

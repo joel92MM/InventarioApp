@@ -1,3 +1,5 @@
 Monitor,150.00
 Teclado,45.50
 Raton,20.00
+Alfombrilla,10.00
+Tarjeta Ram,50.00

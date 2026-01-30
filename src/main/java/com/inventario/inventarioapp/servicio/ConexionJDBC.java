@@ -13,6 +13,11 @@ public class ConexionJDBC {
     private String url;
 
     public Connection conectar() throws SQLException {
+        try {
+            Class.forName("org.sqlite.JDBC"); // Asegura que el driver esté cargado
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("Driver SQLite no encontrado", e);
+        }
         Connection conn = DriverManager.getConnection(url);
         conn.setAutoCommit(false);
         return conn;

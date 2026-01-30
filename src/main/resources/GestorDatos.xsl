@@ -6,7 +6,7 @@
                 <h2>Inventario de Productos</h2>
                 <table border="1">
                     <tr><th>Nombre</th><th>Precio</th></tr>
-                    <xsl:for-each select="productos/producto">
+                    <xsl:for-each select="inventario/producto">
                         <tr>
                             <td><xsl:value-of select="nombre"/></td>
                             <td><xsl:value-of select="precio"/></td>

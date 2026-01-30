@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inventario>
+    <producto>
+        <nombre>Laptop</nombre>
+        <precio>850.0</precio>
+    </producto>
+</inventario>

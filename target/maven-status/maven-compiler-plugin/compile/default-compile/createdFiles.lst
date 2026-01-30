@@ -1,0 +1,7 @@
+com/inventario/inventarioapp/repositorio/ProductoRepository.class
+com/inventario/inventarioapp/entity/Producto.class
+com/inventario/inventarioapp/InventarioAppApplication.class
+com/inventario/inventarioapp/dto/ProductoDTO.class
+com/inventario/inventarioapp/servicio/GestorDatos.class
+com/inventario/inventarioapp/servicio/ConexionJDBC.class
+com/inventario/inventarioapp/excepcionesPersonalizadas/InventarioException.class

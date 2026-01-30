@@ -1,0 +1,3 @@
+Monitor,150.00
+Teclado,45.50
+Raton,20.00

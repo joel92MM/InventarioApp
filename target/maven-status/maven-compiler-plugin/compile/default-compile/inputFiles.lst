@@ -1,0 +1,7 @@
+/Users/joelmeneses/IdeaProjects/InventarioApp/src/main/java/com/inventario/inventarioapp/excepcionesPersonalizadas/InventarioException.java
+/Users/joelmeneses/IdeaProjects/InventarioApp/src/main/java/com/inventario/inventarioapp/entity/Producto.java
+/Users/joelmeneses/IdeaProjects/InventarioApp/src/main/java/com/inventario/inventarioapp/dto/ProductoDTO.java
+/Users/joelmeneses/IdeaProjects/InventarioApp/src/main/java/com/inventario/inventarioapp/InventarioAppApplication.java
+/Users/joelmeneses/IdeaProjects/InventarioApp/src/main/java/com/inventario/inventarioapp/servicio/ConexionJDBC.java
+/Users/joelmeneses/IdeaProjects/InventarioApp/src/main/java/com/inventario/inventarioapp/servicio/GestorDatos.java
+/Users/joelmeneses/IdeaProjects/InventarioApp/src/main/java/com/inventario/inventarioapp/repositorio/ProductoRepository.java
